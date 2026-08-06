@@ -29,8 +29,8 @@ public struct VivoFastPairIdentity: Sendable, Hashable {
 /// `CBAdvertisementDataManufacturerDataKey` 只给厂商数据段（AD type 已被剥掉）。
 /// 因此这里按 CoreBluetooth 的实际输入重写了偏移，并对短广播做宽容处理。
 ///
-/// 本机实测样本（vivo TWS 5）：`37 08 08 01 d8 4a 83 d0 64 0f`
-/// → uuid `0x0837`、bleType `0x08`、版本 V1、随后 6 字节为 MAC `D8:4A:83:D0:64:0F`。
+/// 本机实测样本（vivo TWS 5）：`37 08 08 01 aa bb cc 11 22 33`
+/// → uuid `0x0837`、bleType `0x08`、版本 V1、随后 6 字节为 MAC `AA:BB:CC:11:22:33`。
 public enum VivoFastPairAdvertisement {
 
     public static let uuidNew: UInt16 = 0x0837

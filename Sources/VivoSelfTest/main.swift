@@ -11,6 +11,7 @@ runMultiConnectControlChecks()
 runDecoderChecks()
 runBatteryChecks()
 runBatteryDisplayChecks()
+runBatteryCacheChecks()
 runNoiseChecks()
 runHandshakeChecks()
 

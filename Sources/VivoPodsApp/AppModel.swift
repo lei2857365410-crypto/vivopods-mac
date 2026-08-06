@@ -15,6 +15,9 @@ final class AppModel: ObservableObject {
 
     @Published var state: TransportState = .idle
     @Published var battery: BatteryState?
+    /// 记住每个部件最后一次的有效读数，并标记是否为实时值。
+    /// 断开或某部件无上报时仍能显示旧数字，但会置灰以示区分。
+    @Published var batteryCache = BatteryCache()
     @Published var noise: NoiseState?
     @Published var devices: [MultiConnectDevice] = []
     @Published var logLines: [LogLine] = []
@@ -118,6 +121,9 @@ final class AppModel: ObservableObject {
                     self.stopRefreshTimer()
                     if case .disconnected = st {
                         self.battery = nil
+                        // 缓存里的数值保留（面板仍能显示「上次看到的电量」），
+                        // 但全部标记为非实时 → 置灰
+                        self.batteryCache.markAllStale()
                         self.devices = []
                         // 菜单栏图标在未连接时是隐藏的，若不自动重连，
                         // 耳机再次连上后图标不会回来，用户也没有入口能操作。
@@ -128,7 +134,10 @@ final class AppModel: ObservableObject {
         }
 
         s.onBattery = { [weak self] b in
-            Task { @MainActor in self?.battery = b }
+            Task { @MainActor in
+                self?.battery = b
+                self?.batteryCache.update(b)
+            }
         }
 
         s.onNoise = { [weak self] n in
@@ -212,7 +221,7 @@ final class AppModel: ObservableObject {
     /// 判断某条记录是否就是本机。
     ///
     /// 依据：设备表里本机那条的 MAC 与 Mac 蓝牙控制器地址一致
-    /// （实测 `FC:B2:14:51:93:7D` 同时出现在设备表与 `system_profiler` 中）。
+    /// （实测 `AA:BB:CC:44:55:66` 同时出现在设备表与 `system_profiler` 中）。
     func isSelf(_ device: MultiConnectDevice) -> Bool {
         device.macAddress.caseInsensitiveCompare(localControllerMac ?? "") == .orderedSame
     }

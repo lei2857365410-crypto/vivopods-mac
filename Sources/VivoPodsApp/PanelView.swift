@@ -36,16 +36,18 @@ struct PanelView: View {
                 // .primary 跟随系统外观：浅色下黑字、深色下白字
                 .foregroundStyle(.primary)
 
-            if model.state.isReady, let b = model.battery {
+            // 显示每个部件最后一次的有效读数。耳机不在盒中时 case 上报 0xFF、
+            // 断开时完全没有新数据 —— 这些情况下仍显示旧值，但置灰表示非实时。
+            if !model.batteryCache.isEmpty {
                 HStack(spacing: 14) {
-                    if let l = b.left {
-                        BatteryPill(label: "左", level: l, charging: b.leftCharging)
+                    if let l = model.batteryCache.left {
+                        BatteryPill(label: "左", reading: l)
                     }
-                    if let r = b.right {
-                        BatteryPill(label: "右", level: r, charging: b.rightCharging)
+                    if let r = model.batteryCache.right {
+                        BatteryPill(label: "右", reading: r)
                     }
-                    if let c = b.caseLevel {
-                        BatteryPill(label: "仓", level: c, charging: b.caseCharging)
+                    if let c = model.batteryCache.charging {
+                        BatteryPill(label: "仓", reading: c)
                     }
                 }
             } else {
@@ -130,14 +132,18 @@ struct PanelView: View {
 // MARK: - 子视图
 
 /// 单个部件的电量：`左 83%`，充电中加闪电。
+///
+/// `reading.isStale` 为 true 时数字置灰 —— 那是缓存下来的旧值，不是当前状态。
 struct BatteryPill: View {
     let label: String
-    let level: Int
-    let charging: Bool
+    let reading: BatteryReading
 
     private var tint: Color {
-        if charging { return .green }
-        return level < 20 ? .red : .primary
+        // 缓存值统一用次要色，不参与低电量变红／充电变绿，
+        // 否则会把过期数据渲染得像实时警示
+        if reading.isStale { return .secondary }
+        if reading.charging { return .green }
+        return reading.level < 20 ? .red : .primary
     }
 
     var body: some View {
@@ -145,15 +151,16 @@ struct BatteryPill: View {
             Text(label)
                 .font(.system(size: 11))
                 .foregroundStyle(.secondary)
-            Text("\(level)%")
+            Text("\(reading.level)%")
                 .font(.system(size: 13, weight: .medium, design: .rounded))
                 .foregroundStyle(tint)
-            if charging {
+            if reading.charging {
                 Image(systemName: "bolt.fill")
                     .font(.system(size: 8))
                     .foregroundStyle(.green)
             }
         }
+        .help(reading.isStale ? "\(label)：上次读到的数值，非当前状态" : "")
     }
 }
 
