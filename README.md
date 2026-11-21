@@ -1,5 +1,7 @@
 # VivoPods — vivo TWS 耳机的 macOS 状态栏控制台
 
+适配 iqoo wts air3 pro添加音量条
+
 原生 macOS 菜单栏应用，直接通过蓝牙控制 vivo / iQOO TWS 耳机：电量、降噪模式、多连接设备。
 
 菜单栏显示耳机图标 + 左右电量（`L83 R92`），点击弹出面板，一次点击即可切换降噪模式或切换设备。
