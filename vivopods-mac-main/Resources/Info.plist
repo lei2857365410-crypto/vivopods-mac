@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>zh_CN</string>
+    <key>CFBundleExecutable</key>
+    <string>VivoPods</string>
+    <!-- bundle id 固定不变：TCC 的蓝牙授权按 bundle id 记录，
+         重新构建时保持一致才不会每次都重新弹授权 -->
+    <key>CFBundleIdentifier</key>
+    <string>com.raybuild.vivopods</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleName</key>
+    <string>VivoPods</string>
+    <key>CFBundleDisplayName</key>
+    <string>VivoPods</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleShortVersionString</key>
+    <string>0.1.0</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>14.0</string>
+    <!-- 纯状态栏应用：不要 Dock 图标、不要主菜单 -->
+    <key>LSUIElement</key>
+    <true/>
+    <!-- 没有这一条，CoreBluetooth 会被系统直接拒绝 -->
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>用于读取 vivo 耳机的电量并切换降噪模式。</string>
+    <key>NSHumanReadableCopyright</key>
+    <string>GPL-3.0-only</string>
+</dict>
+</plist>
