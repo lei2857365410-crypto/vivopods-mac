@@ -8,6 +8,7 @@
 
 <img width="602" height="952" alt="a6396e73249b14a26e539d2b902f9628" src="https://github.com/user-attachments/assets/743000e0-394a-4405-95f1-442194957829" />
 
+<img width="294" height="501" alt="image" src="https://github.com/user-attachments/assets/1c561108-98f1-4018-897b-592ce37d7da5" />
 
 - 只有一只耳机有读数时就只显示那一侧；两只都没有则退回显示充电盒
 - 充电中的部件带 ⚡ 并转绿，电量低于 20% 转红
